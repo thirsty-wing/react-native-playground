@@ -63,7 +63,7 @@ export function AboutScreen() {
     onSortingChange: setSorting,
     state: {
       sorting,
-      columnPinning: { left: ['firstName']}, // only reorders cols. need style
+      columnPinning: { left: ['firstName'] }, // only reorders cols. need style
     },
   });
 
@@ -82,15 +82,19 @@ export function AboutScreen() {
         <Text>Seach bar here</Text>
       </View>
       <ScrollView
-        horizontal={true}
         centerContent={true}
         contentContainerStyle={{
-          flexDirection: 'column',
-          alignItems: 'center',
+          alignContent: 'center'
         }}
       >
-        <ScrollView style={{ height: "100%" }} stickyHeaderIndices={[0]}>
-          <View style={{ backgroundColor: '#DDD' }}>
+        <ScrollView
+          horizontal={true}
+          stickyHeaderIndices={[0]}
+          contentContainerStyle={{
+            flexDirection: 'column',
+          }}
+        >
+          <View style={{ backgroundColor: '#DDD', flex: 1 }}>
             { table.getHeaderGroups().map(headerGroup => (
                 <View
                   key={headerGroup.id}
