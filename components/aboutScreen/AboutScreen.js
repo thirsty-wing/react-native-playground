@@ -63,6 +63,7 @@ export function AboutScreen() {
     onSortingChange: setSorting,
     state: {
       sorting,
+      columnPinning: { left: ['firstName']}, // only reorders cols. need style
     },
   });
 
@@ -88,42 +89,41 @@ export function AboutScreen() {
           alignItems: 'center',
         }}
       >
-        <View style={{ backgroundColor: '#DDD' }}>
-          { table.getHeaderGroups().map(headerGroup => (
-              <View
-                key={headerGroup.id}
-                style={{ flexDirection: 'row', gap: 10 }}
-              >
-                { headerGroup.headers.map(header => (
-                  <Pressable
-                    key={header.id}
-                    style={{
-                      height: 25,
-                      justifyContent: 'space-around',
-                      width: 125,
-                    }}
-                    onPress={header.column.getToggleSortingHandler()}
-                  >
-                    <Text>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )
-                      }
-                      {{
-                        asc: ' 🔼',
-                        desc: ' 🔽',
-                      }[header.column.getIsSorted()] ?? null}
-                    </Text>
-                  </Pressable>
-                ))}
-              </View>
-          ))}
-        </View>
-
-        <ScrollView style={{ height: "100%" }}>
+        <ScrollView style={{ height: "100%" }} stickyHeaderIndices={[0]}>
+          <View style={{ backgroundColor: '#DDD' }}>
+            { table.getHeaderGroups().map(headerGroup => (
+                <View
+                  key={headerGroup.id}
+                  style={{ flexDirection: 'row', gap: 10 }}
+                >
+                  { headerGroup.headers.map(header => (
+                    <Pressable
+                      key={header.id}
+                      style={{
+                        height: 25,
+                        justifyContent: 'space-around',
+                        width: 125,
+                      }}
+                      onPress={header.column.getToggleSortingHandler()}
+                    >
+                      <Text>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )
+                        }
+                        {{
+                          asc: ' 🔼',
+                          desc: ' 🔽',
+                        }[header.column.getIsSorted()] ?? null}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+            ))}
+          </View>
           { table.getRowModel().rows.map(row => (
             <View key={row.id} style={{ flexDirection: 'row', gap: 10 }}>
             { row.getVisibleCells().map(cell => (
