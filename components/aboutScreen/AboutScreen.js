@@ -85,6 +85,7 @@ export function AboutScreen() {
         centerContent={true}
         contentContainerStyle={{
           flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         <View style={{ backgroundColor: '#DDD' }}>
