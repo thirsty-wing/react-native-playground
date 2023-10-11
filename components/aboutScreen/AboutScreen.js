@@ -69,6 +69,7 @@ export function AboutScreen() {
   return (
     <View
       style={{
+        alignItems: 'center',
         flex: 1,
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
@@ -76,49 +77,50 @@ export function AboutScreen() {
         paddingRight: insets.right,
       }}
     >
-
-
-          <View style={{ backgroundColor: "#BBB", alignItems: 'center' }}>
-            <Text>AboutScreen</Text>
-            <Text>Seach bar here</Text>
-          </View>
-          <ScrollView
-            horizontal={true}
-            contentContainerStyle={{
-              flexDirection: 'column',
-            }}
-          >
-            <View style={{ backgroundColor: '#DDD' }}>
-              { table.getHeaderGroups().map(headerGroup => (
-                  <View key={headerGroup.id} style={{ flexDirection: 'row', gap: 10 }}>
-                    { headerGroup.headers.map(header => (
-                      <Pressable
-                        key={header.id}
-                        style={{
-                          height: 25,
-                          justifyContent: 'space-around',
-                          width: 125,
-                        }}
-                        onPress={header.column.getToggleSortingHandler()}
-                      >
-                        <Text>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )
-                          }
-                          {{
-                            asc: ' 🔼',
-                            desc: ' 🔽',
-                          }[header.column.getIsSorted()] ?? null}
-                        </Text>
-                      </Pressable>
-                    ))}
-                  </View>
-              ))}
-            </View>
+      <View style={{ backgroundColor: "#BBB", alignItems: 'center' }}>
+        <Text>AboutScreen</Text>
+        <Text>Seach bar here</Text>
+      </View>
+      <ScrollView
+        horizontal={true}
+        contentContainerStyle={{
+          flexDirection: 'column',
+        }}
+      >
+        <View style={{ backgroundColor: '#DDD' }}>
+          { table.getHeaderGroups().map(headerGroup => (
+              <View
+                key={headerGroup.id}
+                style={{ flexDirection: 'row', gap: 10 }}
+              >
+                { headerGroup.headers.map(header => (
+                  <Pressable
+                    key={header.id}
+                    style={{
+                      height: 25,
+                      justifyContent: 'space-around',
+                      width: 125,
+                    }}
+                    onPress={header.column.getToggleSortingHandler()}
+                  >
+                    <Text>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )
+                      }
+                      {{
+                        asc: ' 🔼',
+                        desc: ' 🔽',
+                      }[header.column.getIsSorted()] ?? null}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+          ))}
+        </View>
 
         <ScrollView style={{ height: "100%" }}>
           { table.getRowModel().rows.map(row => (
