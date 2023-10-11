@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import {
@@ -67,6 +67,9 @@ export function AboutScreen() {
     },
   });
 
+  const leftScroll = useRef(null);
+  const rightScroll = useRef(null);
+
   return (
     <View
       style={{
@@ -81,54 +84,38 @@ export function AboutScreen() {
         <Text>AboutScreen</Text>
         <Text>Seach bar here</Text>
       </View>
-      <ScrollView
-        horizontal={true}
-        centerContent={true}
-        contentContainerStyle={{
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
+
+      <View
+        style={{ flexDirection: "row", flex: 1 }}
       >
-        <ScrollView style={{ height: "100%" }} stickyHeaderIndices={[0]}>
-          <View style={{ backgroundColor: '#DDD' }}>
-            { table.getHeaderGroups().map(headerGroup => (
-                <View
-                  key={headerGroup.id}
-                  style={{ flexDirection: 'row', gap: 10 }}
-                >
-                  { headerGroup.headers.map(header => (
-                    <Pressable
-                      key={header.id}
-                      style={{
-                        height: 25,
-                        justifyContent: 'space-around',
-                        width: 125,
-                      }}
-                      onPress={header.column.getToggleSortingHandler()}
-                    >
-                      <Text>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )
-                        }
-                        {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
-                        }[header.column.getIsSorted()] ?? null}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-            ))}
-          </View>
-          { table.getRowModel().rows.map(row => (
-            <View key={row.id} style={{ flexDirection: 'row', gap: 10 }}>
-            { row.getVisibleCells().map(cell => (
+
+        <ScrollView
+          onScroll={e => {
+            const { y } = e.nativeEvent.contentOffset;
+            leftScroll.current?.scrollTo({ y, animated: false });
+          }}
+          ref={rightScroll}
+          showsVerticalScrollIndicator={false}
+          stickyHeaderIndices={[0]}
+        >
+          <Pressable
+            style={{
+              backgroundColor: '#DDD',
+              height: 25,
+              justifyContent: 'space-around',
+              width: 125,
+            }}
+          >
+            <Text>
+              { flexRender(
+                table.getHeaderGroups()[0].headers[0].column.columnDef.header,
+                table.getHeaderGroups()[0].headers[0].getContext(),
+              )}
+            </Text>
+          </Pressable>
+            { table.getRowModel().rows.map(row => (
               <View
-                key={cell.id}
+                key={row.id}
                 style={{
                   height: 25,
                   justifyContent: 'space-around',
@@ -137,15 +124,89 @@ export function AboutScreen() {
               >
                 <Text>
                   {flexRender(
-                    cell.column.columnDef.cell, cell.getContext(),
+                    row.getVisibleCells()[0].column.columnDef.cell,
+                    row.getVisibleCells()[0].getContext(),
                   )}
                 </Text>
               </View>
             ))}
-            </View>
-          ))}
         </ScrollView>
-      </ScrollView>
+
+
+        <ScrollView
+          contentContainerStyle={{
+            flexDirection: 'column',
+          }}
+          horizontal={true}
+        >
+          <ScrollView
+            onScroll={e => {
+              const { y } = e.nativeEvent.contentOffset;
+              rightScroll.current?.scrollTo({ y, animated: false });
+            }}
+            ref={leftScroll}
+            stickyHeaderIndices={[0]}
+            style={{ height: "100%" }}
+          >
+            <View style={{ backgroundColor: '#DDD' }}>
+              { table.getHeaderGroups().map(headerGroup => (
+                  <View
+                    key={headerGroup.id}
+                    style={{ flexDirection: 'row', gap: 10 }}
+                  >
+                    { headerGroup.headers.map((header, index) => (
+                      <Pressable
+                        key={header.id}
+                        style={{
+                          height: 25,
+                          justifyContent: 'space-around',
+                          width: 125,
+                        }}
+                        onPress={header.column.getToggleSortingHandler()}
+                      >
+                        <Text>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )
+                          }
+                          {{
+                            asc: ' 🔼',
+                            desc: ' 🔽',
+                          }[header.column.getIsSorted()] ?? null}
+                        </Text>
+                      </Pressable>
+                    ))}
+                  </View>
+              ))}
+            </View>
+            { table.getRowModel().rows.map(row => (
+              <View key={row.id} style={{ flexDirection: 'row', gap: 10 }}>
+              { row.getVisibleCells().map(cell => (
+                <View
+                  key={cell.id}
+                  style={{
+                    height: 25,
+                    justifyContent: 'space-around',
+                    width: 125,
+                  }}
+                >
+                  <Text>
+                    {flexRender(
+                      cell.column.columnDef.cell, cell.getContext(),
+                    )}
+                  </Text>
+                </View>
+              ))}
+              </View>
+            ))}
+          </ScrollView>
+        </ScrollView>
+
+      </View>
+
     </View>
   );
 }
