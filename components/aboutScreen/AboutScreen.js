@@ -69,7 +69,6 @@ export function AboutScreen() {
   return (
     <View
       style={{
-        alignItems: 'center',
         flex: 1,
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
@@ -83,6 +82,7 @@ export function AboutScreen() {
       </View>
       <ScrollView
         horizontal={true}
+        centerContent={true}
         contentContainerStyle={{
           flexDirection: 'column',
         }}
