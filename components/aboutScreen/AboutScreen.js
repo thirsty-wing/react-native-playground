@@ -7,7 +7,8 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'; import data from './AboutScreen.utils';
+} from '@tanstack/react-table';
+import data from './AboutScreen.utils';
 
 
 const columnHelper = createColumnHelper();
@@ -97,29 +98,39 @@ export function AboutScreen() {
                   style={{ flexDirection: 'row', gap: 10 }}
                 >
                   { headerGroup.headers.map(header => (
-                    <Pressable
+                    <View
                       key={header.id}
                       style={{
+                        alignItems: 'center',
                         height: 25,
-                        justifyContent: 'space-around',
                         width: 125,
+                        flexDirection: 'row',
+                        gap: 5,
                       }}
-                      onPress={header.column.getToggleSortingHandler()}
                     >
                       <Text>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )
-                        }
-                        {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
-                        }[header.column.getIsSorted()] ?? null}
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )
+                          }
                       </Text>
-                    </Pressable>
+                      <Pressable
+                        onPress={header.column.getToggleSortingHandler()}
+                      >
+                        <Text>
+                          {{
+                            asc: '⬆️',
+                            desc: '⬇️',
+                          }[header.column.getIsSorted()] ?? '↕️'}
+                        </Text>
+                      </Pressable>
+                      <Pressable>
+                        <Text>🔍</Text>
+                      </Pressable>
+                    </View>
                   ))}
                 </View>
             ))}
