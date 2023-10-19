@@ -50,7 +50,7 @@ const styles = {
   },
 };
 
-export function AboutScreen() {
+export function AboutScreen({ navigation }) {
 
   const [sorting, setSorting] = React.useState([])
 
@@ -118,7 +118,10 @@ export function AboutScreen() {
                           }
                       </Text>
                       <Pressable
-                        onPress={header.column.getToggleSortingHandler()}
+                        onPress={(e) => {
+			  header.column.getToggleSortingHandler()(e);
+			  navigation.push('About', { greeting: "hi" });
+			}}
                       >
                         <Text>
                           {{
