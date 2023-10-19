@@ -50,9 +50,17 @@ const styles = {
   },
 };
 
-export function AboutScreen({ navigation }) {
+export function AboutScreen({ navigation, route }) {
 
-  const [sorting, setSorting] = React.useState([])
+  const sortConf = [];
+  if (!!route?.params?.id && typeof route?.params?.desc === "boolean") {
+    sortConf.push({
+      id: route.params.id,
+      desc: route.params.desc,
+    });
+  }
+
+  const [sorting, setSorting] = React.useState(sortConf)
 
   const insets = useSafeAreaInsets();
 
@@ -61,10 +69,10 @@ export function AboutScreen({ navigation }) {
     data,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onSortingChange: setSorting,
+    //onSortingChange: setSorting,
     state: {
       sorting,
-      columnPinning: { left: ['firstName']}, // only reorders cols. need style
+      //columnPinning: { left: ['firstName'] }, // only reorders cols. need style
     },
   });
 
@@ -81,6 +89,11 @@ export function AboutScreen({ navigation }) {
       <View style={{ backgroundColor: "#BBB", alignItems: 'center' }}>
         <Text>AboutScreen</Text>
         <Text>Seach bar here</Text>
+	{/* sorting.map(sort => {
+	  return Object.keys(sort).map(keyo => (
+	    <Text key={keyo}>{keyo}: {sort[keyo].toString()}</Text>
+	  ));
+	})*/}
       </View>
       <ScrollView
         horizontal={true}
@@ -118,9 +131,22 @@ export function AboutScreen({ navigation }) {
                           }
                       </Text>
                       <Pressable
-                        onPress={(e) => {
-			  header.column.getToggleSortingHandler()(e);
-			  navigation.push('About', { greeting: "hi" });
+                        onPress={() => {
+			  const sort = header.column.getIsSorted();
+			  if (!sort) {
+			    navigation.push('About', {
+			      id: header.column.id,
+			      desc: true,
+			    });
+			  } else if (sort === "desc") {
+			    navigation.push('About', {
+			      id: header.column.id,
+			      desc: false,
+			    });
+			  } else if (sort === "asc") {
+			    navigation.push("About");
+			  }
+			  
 			}}
                       >
                         <Text>
