@@ -72,7 +72,7 @@ export function AboutScreen() {
     <View
       style={{
         flex: 1,
-        paddingTop: insets.top,
+        //paddingTop: insets.top,
         paddingBottom: insets.bottom,
         paddingLeft: insets.left,
         paddingRight: insets.right,

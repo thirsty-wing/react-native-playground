@@ -24,7 +24,7 @@ export function App() {
       <NavigationContainer linking={linking}>
         <Stack.Navigator
           screenOptions={{
-            headerShown: false,
+            headerShown: true,
           }}
         >
           <Stack.Screen name="Home" component={HomeScreen}/>
